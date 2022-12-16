@@ -23,12 +23,17 @@ public class Tournament extends Treasury implements CORE
 
     public static void main(String[] args){
         setupChallenges();
-        String returned = null;
+        ArrayList<String> challengeDetail = new ArrayList<>();
         for (int i = 0; i < challengeList.size(); i++) {
             Challenge ch = challengeList.get(i);
-            returned =ch.challengeNumber +" " + ch.typeString + " " + ch.enemyName + " " + ch.skillRequired + " " + ch.reward;
-            System.out.println(returned);
+            challengeDetail.add(String.valueOf(ch.challengeNumber));
+            challengeDetail.add(ch.typeString);
+            challengeDetail.add(ch.enemyName);
+            challengeDetail.add(String.valueOf(ch.skillRequired));
+            challengeDetail.add(String.valueOf(ch.reward));
         }
+        //String result = String.join(", ", challengeDetail);
+        System.out.println(challengeDetail.get(1));
    }
 
    private String gameStatus(){
@@ -276,10 +281,18 @@ public class Tournament extends Treasury implements CORE
      * @return returns a String representation of all challenges
      **/
     public String getAllChallenges() {
-//        setupChallenges();
-//        Challenge ch = challengeList.get();
-//        String returned =
-        return "";
+        setupChallenges();
+        ArrayList<String> challengeDetail = new ArrayList<>();
+        for (int i = 0; i < challengeList.size(); i++) {
+            Challenge ch = challengeList.get(i);
+            challengeDetail.add(String.valueOf(ch.challengeNumber));
+            challengeDetail.add(ch.typeString);
+            challengeDetail.add(ch.enemyName);
+            challengeDetail.add(String.valueOf(ch.skillRequired));
+            challengeDetail.add(String.valueOf(ch.reward));
+        }
+        String result = String.join(", ", challengeDetail);
+        return result;
     }
     
     /** Retrieves the challenge represented by the challenge 
