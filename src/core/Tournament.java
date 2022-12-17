@@ -12,7 +12,9 @@ import java.util.*;
 public class Tournament extends Treasury implements CORE
 {
     // Fields
-     ArrayList<Champion> championList = new ArrayList<>();
+    static ArrayList<Warrior> warriorList = new ArrayList<>();
+    static ArrayList<Wizard> wizardList = new ArrayList<>();
+    static ArrayList<Dragon> dragonList = new ArrayList<>();
      static ArrayList<Challenge> challengeList = new ArrayList<>();
 
      ArrayList<Champion> playerTeam = new ArrayList<>();
@@ -22,19 +24,9 @@ public class Tournament extends Treasury implements CORE
 
 
     public static void main(String[] args){
-        setupChallenges();
-        ArrayList<String> challengeDetail = new ArrayList<>();
-        for (int i = 0; i < challengeList.size(); i++) {
-            Challenge ch = challengeList.get(i);
-            challengeDetail.add(String.valueOf(ch.challengeNumber));
-            challengeDetail.add(ch.typeString);
-            challengeDetail.add(ch.enemyName);
-            challengeDetail.add(String.valueOf(ch.skillRequired));
-            challengeDetail.add(String.valueOf(ch.reward));
-        }
-        //String result = String.join(", ", challengeDetail);
-        System.out.println(challengeDetail.get(1));
-   }
+        setupChampion();
+        System.out.println(warriorList);
+ }
 
    private String gameStatus(){
         String gameStatus;
@@ -53,37 +45,37 @@ public class Tournament extends Treasury implements CORE
         }
         return teamStatus;
     }
-    private void setupChampion(){
+    private static void setupChampion(){
         Wizard ganfrank = new Wizard("Ganfrank", 7,400, "transmutation", true);
-        championList.add(ganfrank);
+        wizardList.add(ganfrank);
         Wizard rudolf = new Wizard("Rudolf", 6,400, "invisibility", true);
-        championList.add(rudolf);
+        wizardList.add(rudolf);
         Warrior elblond = new Warrior("Elblond", 1,150,"sword");
-        championList.add(elblond);
+        warriorList.add(elblond);
         Warrior flimsi = new Warrior("Flimsi", 2, 200, "bow");
-        championList.add(flimsi);
+        warriorList.add(flimsi);
         Dragon drabina = new Dragon("Drabina", 7, 500, false);
-        championList.add(drabina);
+        dragonList.add(drabina);
         Dragon golum = new Dragon("Golum",7, 500, true);
-        championList.add(golum);
+        dragonList.add(golum);
         Warrior argon = new Warrior("Argon", 9,900,"mace");
-        championList.add(argon);
+        warriorList.add(argon);
         Wizard neon = new Wizard("Neon", 2,300, "translocation", false);
-        championList.add(neon);
+        wizardList.add(neon);
         Dragon xenon = new Dragon("Xenon",7, 500,  true);
-        championList.add(xenon);
+        dragonList.add(xenon);
         Warrior atlanta = new Warrior("Atlanta", 5, 500, "bow");
-        championList.add(atlanta);
+        warriorList.add(atlanta);
         Wizard krypton = new Wizard("Krypton", 8, 300,"fireballs", false);
-        championList.add(krypton);
+        wizardList.add(krypton);
         Wizard hedwig = new Wizard("Hedwig", 1,400,"flying", true);
-        championList.add(hedwig);
+        wizardList.add(hedwig);
     }
 
     private static void setupChallenges(){
         Challenge challenge1 = new Challenge(1, ChallengeType.MAGIC, "Borg", 3, 100);
         challengeList.add(challenge1);
-        Challenge challenge2 = new Challenge(2, ChallengeType.FIGHT, "Hunt", 3, 120);
+        Challenge challenge2 = new Challenge(2, ChallengeType.FIGHT, "Huns", 3, 120);
         challengeList.add(challenge2);
         Challenge challenge3 = new Challenge(3, ChallengeType.MYSTERY, "Ferengi", 3, 150);
         challengeList.add(challenge3);
@@ -172,6 +164,7 @@ public class Tournament extends Treasury implements CORE
      * @return details of any champion with the given name
      **/
     public String getChampionDetails(String nme){
+        setupChampion();
 
 
        return "";
@@ -211,7 +204,7 @@ public class Tournament extends Treasury implements CORE
      **/
     public boolean isInPlayersTeam(String nme){
         setupChampion();
-        if(championList.contains(nme)){
+        if(playerTeam.contains(nme)){
             return true;
         }
        return false;
@@ -285,11 +278,12 @@ public class Tournament extends Treasury implements CORE
         ArrayList<String> challengeDetail = new ArrayList<>();
         for (int i = 0; i < challengeList.size(); i++) {
             Challenge ch = challengeList.get(i);
-            challengeDetail.add(String.valueOf(ch.challengeNumber));
-            challengeDetail.add(ch.typeString);
-            challengeDetail.add(ch.enemyName);
-            challengeDetail.add(String.valueOf(ch.skillRequired));
-            challengeDetail.add(String.valueOf(ch.reward));
+//            challengeDetail.add(String.valueOf(ch.challengeNumber));
+//            challengeDetail.add(ch.typeString);
+//            challengeDetail.add(ch.enemyName);
+//            challengeDetail.add(String.valueOf(ch.skillRequired));
+//            challengeDetail.add(String.valueOf(ch.reward));
+            challengeDetail.add(String.valueOf(ch));
         }
         String result = String.join(", ", challengeDetail);
         return result;

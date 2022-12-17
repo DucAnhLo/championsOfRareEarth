@@ -3,19 +3,18 @@ package core;
 import java.awt.*;
 
 public class Champion {
-    private String name;
-    private int skillLevel;
-    private int entryFee;
-    private ChampionState active = ChampionState.ACTIVE;
-    private ChampionState waiting = ChampionState.WAITING;
-    private ChampionState dead = ChampionState.DEAD;
+    String name;
+    int skillLevel;
+    int entryFee;
+    String stateString;
 
 
 
-    public Champion(String name, int skillLevel, int entryFee) {
+    public Champion(String name, ChampionState state, int skillLevel, int entryFee) {
         this.name = name;
         this.skillLevel = skillLevel;
         this.entryFee = entryFee;
+        stateString = state.toString();
     }
 
     @Override
