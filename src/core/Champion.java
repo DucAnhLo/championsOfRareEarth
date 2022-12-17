@@ -6,15 +6,15 @@ public class Champion {
     String name;
     int skillLevel;
     int entryFee;
-    String stateString;
+    //String stateString;
+    ChampionState state;
 
 
-
-    public Champion(String name, ChampionState state, int skillLevel, int entryFee) {
+    public Champion(String name,int skillLevel, int entryFee) {
         this.name = name;
         this.skillLevel = skillLevel;
         this.entryFee = entryFee;
-        stateString = state.toString();
+        //stateString = state.toString();
     }
 
     @Override

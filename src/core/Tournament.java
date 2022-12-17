@@ -15,18 +15,19 @@ public class Tournament extends Treasury implements CORE
     static ArrayList<Warrior> warriorList = new ArrayList<>();
     static ArrayList<Wizard> wizardList = new ArrayList<>();
     static ArrayList<Dragon> dragonList = new ArrayList<>();
-     static ArrayList<Challenge> challengeList = new ArrayList<>();
+    static ArrayList<Champion> championList = new ArrayList<>();
+    static ArrayList<Challenge> challengeList = new ArrayList<>();
 
-     ArrayList<Champion> playerTeam = new ArrayList<>();
-     private static String playerName;
-     private static Treasury treasury = new Treasury();
+    static ArrayList<Champion> playerTeam = new ArrayList<>();
+    private static String playerName;
+    private static Treasury treasury = new Treasury();
 
 
 
-    public static void main(String[] args){
-        setupChampion();
-        System.out.println(warriorList);
- }
+//    public static void main(String[] args){
+//
+//
+//    }
 
    private String gameStatus(){
         String gameStatus;
@@ -46,7 +47,7 @@ public class Tournament extends Treasury implements CORE
         return teamStatus;
     }
     private static void setupChampion(){
-        Wizard ganfrank = new Wizard("Ganfrank", 7,400, "transmutation", true);
+        Wizard ganfrank = new Wizard("Ganfrank",7,400, "transmutation", true);
         wizardList.add(ganfrank);
         Wizard rudolf = new Wizard("Rudolf", 6,400, "invisibility", true);
         wizardList.add(rudolf);
@@ -54,7 +55,7 @@ public class Tournament extends Treasury implements CORE
         warriorList.add(elblond);
         Warrior flimsi = new Warrior("Flimsi", 2, 200, "bow");
         warriorList.add(flimsi);
-        Dragon drabina = new Dragon("Drabina", 7, 500, false);
+        Dragon drabina = new Dragon("Drabina",7, 500, false);
         dragonList.add(drabina);
         Dragon golum = new Dragon("Golum",7, 500, true);
         dragonList.add(golum);
@@ -62,7 +63,7 @@ public class Tournament extends Treasury implements CORE
         warriorList.add(argon);
         Wizard neon = new Wizard("Neon", 2,300, "translocation", false);
         wizardList.add(neon);
-        Dragon xenon = new Dragon("Xenon",7, 500,  true);
+        Dragon xenon = new Dragon("Xenon", 7, 500, true);
         dragonList.add(xenon);
         Warrior atlanta = new Warrior("Atlanta", 5, 500, "bow");
         warriorList.add(atlanta);
@@ -98,26 +99,38 @@ public class Tournament extends Treasury implements CORE
         Challenge challenge12 = new Challenge(12, ChallengeType.MYSTERY, "Celt", 1, 250);
         challengeList.add(challenge12);
     }
-    
-    //**************** CORE ************************** 
+
+    private static void initilizeChampion(){
+       setupChampion();
+       for(Warrior wr : warriorList){
+           championList.add(wr);
+       }
+        for(Wizard wz : wizardList){
+            championList.add(wz);
+        }
+        for(Dragon dr : dragonList){
+            championList.add(dr);
+        }
+    }
+    //**************** CORE **************************
     /** Constructor requires the name of the player
      * @param pl the name of the player
-     */  
+     */
     public Tournament(String pl)
     {
        playerName = pl;
     }
-    
-    
+
+
     //******* Implements interface CORE *******************
     /**Returns a String representation of the state of the game,
      * including the name of the player, state of the treasury,
-     * whether defeated or not, and the champions currently in the 
+     * whether defeated or not, and the champions currently in the
      * team,(or, "No champions" if team is empty)
-     * 
+     *
      * @return a String representation of the state of the game,
      * including the name of the player, state of the treasury,
-     * whether defeated or not, and the champions currently in the 
+     * whether defeated or not, and the champions currently in the
      * team,(or, "No champions" if team is empty)
      */
 //
@@ -132,9 +145,9 @@ public class Tournament extends Treasury implements CORE
     }
 
     /** returns true if Treasury <=0 and the player's team has no
-     * champions which can be withdrawn. 
-     * @return true if Treasury <=0 and the player's team has no 
-     * champions which can be decommissioned. 
+     * champions which can be withdrawn.
+     * @return true if Treasury <=0 and the player's team has no
+     * champions which can be decommissioned.
      */
     public boolean isDefeated(){
         if(treasury.balance <= 0 && playerTeam == null){
@@ -143,67 +156,97 @@ public class Tournament extends Treasury implements CORE
             return false;
         }
     }
-    
+
     /** returns the amount of money in the Treasury
      * @return the amount of money in the Treasury
      */
     public int getMoney(){
        return treasury.balance;
-    }    
-    
+    }
+
     /**Returns a String representation of all champions in reserve
      * @return a String representation of all champions in reserve
      **/
     public String getReserve(){
-        
-       return "";
+        initilizeChampion();
+        ArrayList<Champion> reserveList = new ArrayList<>();
+        for(Champion ch :championList){
+            if(!playerTeam.contains(ch)){
+                ch.state = ChampionState.WAITING;
+                reserveList.add(ch);
+            }
+        }
+       return "" + reserveList;
     }
-       
+
     /** Returns details of any champion with the given name
      * @param nme is the name of the champion
      * @return details of any champion with the given name
      **/
     public String getChampionDetails(String nme){
         setupChampion();
-
-
-       return "";
+        String result = null;
+        for(int i =0; i<warriorList.size();i++){
+            Warrior wr = warriorList.get(i);
+            if(nme == wr.name){
+                result = String.valueOf(wr);
+            }
+        }
+       return result;
     }
-    
+
     /** returns whether champion is in reserve
     * @param nme is the name of the champion
     * @return true if champion in reserve, false otherwise
     */
     public boolean isInReserve(String nme) {
-        
+        for(Champion ch: championList){
+            if(ch.name == nme){
+                return true;
+            }
+        }
         return false;
     }
-    
- // ***************** Players Team************************   
-    /** Allows a champion to be entered for the player's team, if there 
-     * is enough money in the Treasury for the entry fee.The champion's 
+
+ // ***************** Players Team************************
+    /** Allows a champion to be entered for the player's team, if there
+     * is enough money in the Treasury for the entry fee.The champion's
      * state is set to "active"
-     * 0 if champion is entered in the player's team, 
-     * 1 if champion is not in reserve, 
-     * 2 if not enough money in the treasury, 
-     * -1 if there is no such champion 
+     * 0 if champion is entered in the player's team,
+     * 1 if champion is not in reserve,
+     * 2 if not enough money in the treasury,
+     * -1 if there is no such champion
      * @param nme represents the name of the champion
      * @return as shown above
-     **/        
+     **/
     public int enterChampion(String nme){
-
-       return 0;
+        initilizeChampion();
+        for(int i = 0; i< championList.size();i++){
+            Champion cham = championList.get(i);
+            if(cham.name == nme && treasury.balance >= cham.entryFee && !playerTeam.contains(nme)){
+                playerTeam.add(cham);
+                championList.remove(cham);
+                cham.state = ChampionState.ACTIVE;
+                treasury.balance -= cham.entryFee;
+                return 0;
+            }
+            else if (championList.contains(nme)){
+                return 1;
+            }else if (treasury.balance < cham.entryFee){
+                return 2;
+            }
+        }
+       return -1;
     }
-    
-        
-    /** Returns true if the champion with the name is in 
+
+
+    /** Returns true if the champion with the name is in
      * the player's team, false otherwise.
      * @param nme is the name of the champion
      * @return  true if the champion with the name
      * is in the player's team, false otherwise.
      **/
     public boolean isInPlayersTeam(String nme){
-        setupChampion();
         if(playerTeam.contains(nme)){
             return true;
         }
@@ -217,24 +260,24 @@ public class Tournament extends Treasury implements CORE
      * 2 - if champion not retired because not in team
      * -1 - if no such champion
      * @param nme is the name of the champion
-     * @return as shown above 
+     * @return as shown above
      **/
     public int retireChampion(String nme){
-        
+
        return 0;
     }
-        
-        
+
+
     /**Returns a String representation of the champions in the player's team
      * or the message "No champions entered"
      * @return a String representation of the champions in the player's team
      **/
     public String getTeam(){
-        
+
        return "";
     }
-    
-    
+
+
 //**********************Challenges************************* 
     /** returns true if the number represents a challenge
      * @param num is the number of the challenge
@@ -251,11 +294,11 @@ public class Tournament extends Treasury implements CORE
          }
          return false;
      }
-     
-    /** Provides a String representation of an challenge given by 
+
+    /** Provides a String representation of an challenge given by
      * the challenge number
      * @param num the number of the challenge
-     * @return returns a String representation of a challenge given by 
+     * @return returns a String representation of a challenge given by
      * the challenge number
      **/
     public String getChallenge(int num){
@@ -269,8 +312,8 @@ public class Tournament extends Treasury implements CORE
         }
        return " " + type;
     }
-    
-    /** Provides a String representation of all challenges 
+
+    /** Provides a String representation of all challenges
      * @return returns a String representation of all challenges
      **/
     public String getAllChallenges() {
@@ -278,34 +321,29 @@ public class Tournament extends Treasury implements CORE
         ArrayList<String> challengeDetail = new ArrayList<>();
         for (int i = 0; i < challengeList.size(); i++) {
             Challenge ch = challengeList.get(i);
-//            challengeDetail.add(String.valueOf(ch.challengeNumber));
-//            challengeDetail.add(ch.typeString);
-//            challengeDetail.add(ch.enemyName);
-//            challengeDetail.add(String.valueOf(ch.skillRequired));
-//            challengeDetail.add(String.valueOf(ch.reward));
             challengeDetail.add(String.valueOf(ch));
         }
         String result = String.join(", ", challengeDetail);
         return result;
     }
-    
-    /** Retrieves the challenge represented by the challenge 
-     * number.Finds a champion from the team which can challenge the 
-     * challenge. The results of fighting an challenge will be 
-     * one of the following:  
-     * 0 - challenge won, add reward to the treasury, 
+
+    /** Retrieves the challenge represented by the challenge
+     * number.Finds a champion from the team which can challenge the
+     * challenge. The results of fighting an challenge will be
+     * one of the following:
+     * 0 - challenge won, add reward to the treasury,
      * 1 - challenge lost on battle skills  - deduct reward from
      * treasury and record champion as "dead"
      * 2 - challenge lost as no suitable champion is  available, deduct
-     * the reward from treasury 
-     * 3 - If a challenge is lost and player completely defeated (no money and 
-     * no champions to withdraw) 
-     * -1 - no such challenge 
+     * the reward from treasury
+     * 3 - If a challenge is lost and player completely defeated (no money and
+     * no champions to withdraw)
+     * -1 - no such challenge
      * @param chalNo is the number of the challenge
      * @return an int showing the result(as above) of fighting the challenge
-     */ 
+     */
     public int fightChallenge(int chalNo){
-        
+
        return 0;
     }
 

@@ -6,9 +6,20 @@ public class Warrior extends Champion {
     private String championType;
 
 
-    public Warrior(String name, ChampionState state, int skillLevel, int entryFee) {
-        super(name, state, skillLevel, entryFee);
+    public Warrior(String name, int skillLevel, int entryFee, String weapon) {
+        super(name, skillLevel, entryFee);
         this.weapon = weapon;
         championType = "Warrior";
+    }
+
+    @Override
+    public String toString() {
+        return "Warrior{" +
+                "weapon='" + weapon + '\'' +
+                ", championType='" + championType + '\'' +
+                ", name='" + name + '\'' +
+                ", skillLevel=" + skillLevel +
+                ", entryFee=" + entryFee +
+                '}';
     }
 }

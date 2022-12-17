@@ -11,11 +11,16 @@ public class Dragon extends Champion{
         championType = "Dragon";
     }
 
+
+
     @Override
     public String toString() {
         return "Dragon{" +
                 "talkAbility=" + talkAbility +
                 ", championType='" + championType + '\'' +
+                ", name='" + name + '\'' +
+                ", skillLevel=" + skillLevel +
+                ", entryFee=" + entryFee +
                 '}';
     }
 }

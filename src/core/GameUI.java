@@ -12,7 +12,7 @@ public class GameUI
     
     private static Scanner myIn = new Scanner(System.in);
 
-    public static void main(String[] args)
+
     {
 
         Tournament tr ;
