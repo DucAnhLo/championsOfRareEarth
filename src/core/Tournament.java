@@ -17,6 +17,7 @@ public class Tournament extends Treasury implements CORE
     static ArrayList<Dragon> dragonList = new ArrayList<>();
     static ArrayList<Champion> championList = new ArrayList<>();
     static ArrayList<Challenge> challengeList = new ArrayList<>();
+    static ArrayList<Champion> reserveList = new ArrayList<>();
 
     static ArrayList<Champion> playerTeam = new ArrayList<>();
     private static String playerName;
@@ -24,11 +25,17 @@ public class Tournament extends Treasury implements CORE
 
 
 
-//    public static void main(String[] args){
-//
-//
+//    public static void main(String[] args) {
+//        initilizeChampion();
+//        Champion ch;
+//        String nme = "Argon";
+//        //ch.name = nme;
+//        for (int i = 0; i < championList.size(); i++) {
+//            if(championList.contains(ch)){
+//                System.out.println(1);
+//            }
+//        }
 //    }
-
    private String gameStatus(){
         String gameStatus;
         if(isDefeated()){
@@ -112,6 +119,13 @@ public class Tournament extends Treasury implements CORE
             championList.add(dr);
         }
     }
+
+    private static void initilizeReverse(){
+       initilizeChampion();
+       for(Champion ch: championList){
+           reserveList.add(ch);
+       }
+    }
     //**************** CORE **************************
     /** Constructor requires the name of the player
      * @param pl the name of the player
@@ -169,7 +183,6 @@ public class Tournament extends Treasury implements CORE
      **/
     public String getReserve(){
         initilizeChampion();
-        ArrayList<Champion> reserveList = new ArrayList<>();
         for(Champion ch :championList){
             if(!playerTeam.contains(ch)){
                 ch.state = ChampionState.WAITING;
@@ -200,7 +213,7 @@ public class Tournament extends Treasury implements CORE
     * @return true if champion in reserve, false otherwise
     */
     public boolean isInReserve(String nme) {
-        for(Champion ch: championList){
+        for(Champion ch: reserveList){
             if(ch.name == nme){
                 return true;
             }
@@ -220,23 +233,23 @@ public class Tournament extends Treasury implements CORE
      * @return as shown above
      **/
     public int enterChampion(String nme){
-        initilizeChampion();
-        for(int i = 0; i< championList.size();i++){
-            Champion cham = championList.get(i);
-            if(cham.name == nme && treasury.balance >= cham.entryFee && !playerTeam.contains(nme)){
-                playerTeam.add(cham);
-                championList.remove(cham);
-                cham.state = ChampionState.ACTIVE;
-                treasury.balance -= cham.entryFee;
+        getReserve();
+        for(int i = 0; i<reserveList.size();i++) {
+            Champion ch = reserveList.get(i);
+            if (!String.valueOf(championList).contains(nme)) {
+                return -1;
+            } else if (treasury.balance >= ch.entryFee) {
+                playerTeam.add(ch);
+                reserveList.remove(ch);
+                //treasury.balance = treasury.balance ;
                 return 0;
-            }
-            else if (championList.contains(nme)){
+            } else if (String.valueOf(playerTeam).contains(nme)) {
                 return 1;
-            }else if (treasury.balance < cham.entryFee){
+            } else if (treasury.balance < ch.entryFee) {
                 return 2;
             }
         }
-       return -1;
+        return 0;
     }
 
 
@@ -263,8 +276,22 @@ public class Tournament extends Treasury implements CORE
      * @return as shown above
      **/
     public int retireChampion(String nme){
-
-       return 0;
+        for(int i = 0; i < playerTeam.size();i++){
+            if(!String.valueOf(championList).contains(nme)){
+                return -1;
+            }
+            else if(!String.valueOf(playerTeam).contains(nme)){
+                return 2;
+            }
+            else if(String.valueOf(playerTeam).contains(nme)){
+                playerTeam.remove(nme);
+                return 0;
+            }
+            else if(ch.state == ChampionState.DEAD){
+                return 1;
+            }
+        }
+       return -3;
     }
 
 

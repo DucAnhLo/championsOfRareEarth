@@ -88,7 +88,7 @@ public class T4ChampionEnteredTest {
         game.enterChampion("Flimsi");
         game.enterChampion("Ganfrank");
         game.enterChampion("Argon");
-        assertEquals(expected, game.getMoney());
+         assertEquals(expected, game.getMoney());
     }
     
     @Test
@@ -125,7 +125,7 @@ public class T4ChampionEnteredTest {
         assertEquals(expected, actual);
     }
     @Test
-    public void oSuchCnhampionEnteredNoDeduction() {
+    public void NoSuchChampionEnteredNoDeduction() {
         int expected = 1000;
         game.enterChampion("Boggle");
         int actual = game.getMoney();
