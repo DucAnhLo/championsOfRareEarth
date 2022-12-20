@@ -17,6 +17,14 @@ public class Champion {
         //stateString = state.toString();
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public int getEntryFee() {
+        return entryFee;
+    }
+
     @Override
     public String toString() {
         return "Champion{" +

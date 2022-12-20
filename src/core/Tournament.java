@@ -213,12 +213,12 @@ public class Tournament extends Treasury implements CORE
     * @return true if champion in reserve, false otherwise
     */
     public boolean isInReserve(String nme) {
-        for(Champion ch: reserveList){
-            if(ch.name == nme){
-                return true;
+        for(Champion ch: playerTeam){
+            if(ch.getName().equals(nme)){
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
  // ***************** Players Team************************
@@ -233,23 +233,29 @@ public class Tournament extends Treasury implements CORE
      * @return as shown above
      **/
     public int enterChampion(String nme){
-        getReserve();
-        for(int i = 0; i<reserveList.size();i++) {
-            Champion ch = reserveList.get(i);
-            if (!String.valueOf(championList).contains(nme)) {
-                return -1;
-            } else if (treasury.balance >= ch.entryFee) {
-                playerTeam.add(ch);
-                reserveList.remove(ch);
-                //treasury.balance = treasury.balance ;
-                return 0;
-            } else if (String.valueOf(playerTeam).contains(nme)) {
-                return 1;
-            } else if (treasury.balance < ch.entryFee) {
-                return 2;
+        initilizeReverse();
+        Champion targetChampion = null;
+        for(Champion ch : reserveList){
+            if(ch.getName().equals(nme)){
+                targetChampion = ch;
+                break;
             }
         }
-        return 0;
+
+        if(treasury.balance >= targetChampion.getEntryFee()){
+            playerTeam.add(targetChampion);
+            reserveList.remove(targetChampion);
+            treasury.balance -= targetChampion.getEntryFee();
+            if(playerTeam.contains(targetChampion) && !reserveList.contains(targetChampion)){
+                return 0;
+            }else if(!reserveList.contains(targetChampion)){
+                return -1;
+            }else {
+                return 1;
+            }
+        }else {
+            return 2;
+        }
     }
 
 
@@ -260,10 +266,12 @@ public class Tournament extends Treasury implements CORE
      * is in the player's team, false otherwise.
      **/
     public boolean isInPlayersTeam(String nme){
-        if(playerTeam.contains(nme)){
-            return true;
+        for(Champion ch : playerTeam){
+            if(ch.getName().equals(nme)){
+                return true;
+            }
         }
-       return false;
+        return false;
     }
 
     /** Removes a champion from the team to the reserves (if they are in the team)
