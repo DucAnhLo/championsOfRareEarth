@@ -16,6 +16,11 @@ public class Wizard extends Champion {
     }
 
     @Override
+    public String getChampionType() {
+        return championType;
+    }
+
+    @Override
     public String toString() {
         return "Wizard{" +
                 "spell='" + spell + '\'' +

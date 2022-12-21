@@ -25,17 +25,40 @@ public class Tournament extends Treasury implements CORE
 
 
 
-//    public static void main(String[] args) {
+    public static void main(String[] args) {
 //        initilizeChampion();
-//        Champion ch;
-//        String nme = "Argon";
-//        //ch.name = nme;
-//        for (int i = 0; i < championList.size(); i++) {
-//            if(championList.contains(ch)){
-//                System.out.println(1);
-//            }
-//        }
-//    }
+//        System.out.println(canFightMagic("Ganfrank"));
+    }
+
+    public static void addChampion(String nme){
+        initilizeReverse();
+        Champion targetChampion = null;
+        for(Champion ch : reserveList){
+            if(ch.getName().equals(nme)){
+                targetChampion = ch;
+                break;
+            }
+        }
+        if(!championList.contains(targetChampion)){
+            treasury.balance = 1000;
+            System.out.println("No Champion");
+            System.out.println(treasury.balance);
+        }
+
+        if(treasury.balance >= targetChampion.getEntryFee()){
+            playerTeam.add(targetChampion);
+            reserveList.remove(targetChampion);
+            treasury.balance -= targetChampion.getEntryFee();
+            System.out.println(treasury.balance);
+            if(playerTeam.contains(targetChampion) && !reserveList.contains(targetChampion)){
+                System.out.println("Added");
+            }else {
+                System.out.println("Already added");
+            }
+        }else {
+            System.out.println("Not enough money");
+        }
+    }
    private String gameStatus(){
         String gameStatus;
         if(isDefeated()){
@@ -242,14 +265,17 @@ public class Tournament extends Treasury implements CORE
             }
         }
 
+        if(!championList.contains(targetChampion)){
+            treasury.balance = 1000;
+            return -1;
+        }
+
         if(treasury.balance >= targetChampion.getEntryFee()){
             playerTeam.add(targetChampion);
             reserveList.remove(targetChampion);
             treasury.balance -= targetChampion.getEntryFee();
             if(playerTeam.contains(targetChampion) && !reserveList.contains(targetChampion)){
                 return 0;
-            }else if(!reserveList.contains(targetChampion)){
-                return -1;
             }else {
                 return 1;
             }
@@ -284,22 +310,26 @@ public class Tournament extends Treasury implements CORE
      * @return as shown above
      **/
     public int retireChampion(String nme){
-        for(int i = 0; i < playerTeam.size();i++){
-            if(!String.valueOf(championList).contains(nme)){
-                return -1;
-            }
-            else if(!String.valueOf(playerTeam).contains(nme)){
-                return 2;
-            }
-            else if(String.valueOf(playerTeam).contains(nme)){
-                playerTeam.remove(nme);
-                return 0;
-            }
-            else if(ch.state == ChampionState.DEAD){
-                return 1;
+
+        Champion targetChampion = null;
+        for(Champion ch : championList){
+            if(ch.getName().equals(nme)){
+                targetChampion = ch;
+                break;
             }
         }
-       return -3;
+
+        if(playerTeam.contains(targetChampion) && targetChampion.state != ChampionState.DEAD){
+            playerTeam.remove(targetChampion);
+            reserveList.add(targetChampion);
+            return 0;
+        }else if ( targetChampion.state == ChampionState.DEAD){
+            return 1;
+        }else if(!playerTeam.contains(targetChampion)){
+            return 2;
+        }else {
+            return -1;
+        }
     }
 
 
@@ -361,6 +391,55 @@ public class Tournament extends Treasury implements CORE
         String result = String.join(", ", challengeDetail);
         return result;
     }
+    public static boolean canFightMystery(String name){
+        Champion targetChampion = null;
+        for(Champion ch : championList){
+            if(ch.getName().equals(name)){
+                targetChampion = ch;
+                break;
+            }
+        }
+
+        if(targetChampion.getChampionType() == "Wizard"){
+            System.out.println("Can fight Mystery Challenge");
+            return true;
+        }
+        return false;
+    }
+    public static boolean canFightFight(String name){
+        initilizeChampion();
+        Champion targetChampion = null;
+        for(Champion ch : championList){
+            if(ch.getName().equals(name)){
+                targetChampion = ch;
+                break;
+            }
+        }
+
+        if(targetChampion.getChampionType() == "Wizard"
+                || targetChampion.getChampionType() == "Warrior"
+        || targetChampion.getChampionType() == "Dragon"){
+            System.out.println("Can fight Fight Challenge");
+            return true;
+        }
+        return false;
+    }
+    public static boolean canFightMagic(String name){
+        initilizeChampion();
+        Champion targetChampion = null;
+        for(Champion ch : championList){
+            if(ch.getName().equals(name)){
+                targetChampion = ch;
+                break;
+            }
+        }
+
+        if(targetChampion.getChampionType() == "Wizard"){
+            System.out.println("Can fight Magic Challenge");
+            return true;
+        }
+        return false;
+    }
 
     /** Retrieves the challenge represented by the challenge
      * number.Finds a champion from the team which can challenge the
@@ -378,6 +457,39 @@ public class Tournament extends Treasury implements CORE
      * @return an int showing the result(as above) of fighting the challenge
      */
     public int fightChallenge(int chalNo){
+        setupChallenges();
+        //Challenge want to fight
+        Challenge targetChallenge = null;
+        for(Challenge challenge : challengeList){
+            if(challenge.challengeNumber == chalNo){
+                targetChallenge = challenge;
+                break;
+            }
+        }
+
+
+        //Check if challenge is present
+        if(!challengeList.contains(chalNo)){
+            return -1;
+        }
+
+
+        for(Champion ch : playerTeam){
+            //Win Challenge
+            if(ch.skillLevel > targetChallenge.skillRequired){
+                treasury.balance += targetChallenge.reward;
+                return 0;
+            }
+            //Lost on battle skill
+            else if(ch.skillLevel < targetChallenge.skillRequired){
+                treasury.balance -= targetChallenge.reward;
+                return 1;
+            }
+            // No matched champion
+
+        }
+
+
 
        return 0;
     }

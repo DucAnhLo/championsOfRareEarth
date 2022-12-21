@@ -2,7 +2,7 @@ package core;
 
 import java.awt.*;
 
-public class Champion {
+public abstract class Champion {
     String name;
     int skillLevel;
     int entryFee;
@@ -24,6 +24,10 @@ public class Champion {
     public int getEntryFee() {
         return entryFee;
     }
+
+
+    public abstract String getChampionType();
+
 
     @Override
     public String toString() {

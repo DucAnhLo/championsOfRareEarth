@@ -12,6 +12,12 @@ public class Dragon extends Champion{
     }
 
 
+    @Override
+    public String getChampionType() {
+        return championType;
+    }
+
+
 
     @Override
     public String toString() {

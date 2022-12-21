@@ -13,6 +13,11 @@ public class Warrior extends Champion {
     }
 
     @Override
+    public String getChampionType() {
+        return championType;
+    }
+
+    @Override
     public String toString() {
         return "Warrior{" +
                 "weapon='" + weapon + '\'' +
