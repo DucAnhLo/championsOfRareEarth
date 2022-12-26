@@ -11,6 +11,9 @@ public class Dragon extends Champion{
         championType = "Dragon";
     }
 
+    public boolean isTalkAbility() {
+        return talkAbility;
+    }
 
     @Override
     public String getChampionType() {

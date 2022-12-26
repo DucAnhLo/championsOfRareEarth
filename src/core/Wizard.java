@@ -25,8 +25,8 @@ public class Wizard extends Champion {
         return "Wizard{" +
                 "spell='" + spell + '\'' +
                 ", nacromancer=" + nacromancer +
-                ", championType='" + championType + '\'' +
-                ", name='" + name + '\'' +
+                ", championType=" + championType + '\'' +
+                ", name=" + name + '\'' +
                 ", skillLevel=" + skillLevel +
                 ", entryFee=" + entryFee +
                 '}';
