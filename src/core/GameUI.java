@@ -12,7 +12,7 @@ public class GameUI
     
     private static Scanner myIn = new Scanner(System.in);
 
-
+    public static void main(String[] args)
     {
 
         Tournament tr ;
@@ -22,6 +22,7 @@ public class GameUI
         int result = -1; 
         try
         {
+
             System.out.println("Enter player's name");
             String s = myIn.nextLine();
             //myIn.nextLine();
@@ -37,6 +38,7 @@ public class GameUI
                 else if (choice == 2)
                 {
                     // code omitted
+                    System.out.println(tr.getTeam());
                 }
                 else if (choice == 3)
                 {
@@ -62,11 +64,14 @@ public class GameUI
                         result = tr.fightChallenge(number);
                     }
                     output = processChallengeResult(result);
-                    System.out.println("\n" + output + "\nTreasury = " + tr.getMoney());
+                    System.out.println("\n" + output + "\nTreasury = £" + tr.getMoney());
                 }
                 else if (choice==6)
                 {
-                    // code omitted
+                    System.out.println("Enter Champion name");
+                    String nme = (myIn.nextLine()).trim();
+                    result = tr.retireChampion(nme);
+                    System.out.println("\n" + output + "\nTreasury = £" + tr.getMoney());
                 }  
                 else if (choice==7)
                 {
